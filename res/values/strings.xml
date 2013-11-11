@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidProject</string>
+    <string name="action_settings">Settings</string>
+    <string name="UVA">University of Virginia</string>
+    <string name="cs_2110">CS2110</string>
+    <string name="fall_2013">Fall 2013</string>
+    <string name="kevin_d">Kevin Dendtler</string>
+    <string name="kevin_q">Kevin Qian</string>
+    <string name="elisabeth_vs">Elisabeth Von Spakovsky</string>
+    <string name="aaron_p">Aaron Paul</string>
+    <string name="two_state_resume_button">Creates two-state resume button. One each for times when the button is pressed and times when it is not</string>
+    <string name="two_state_audio_button">Two state audio button for pressed/unpressed</string>
+    <string name="two_state_quit_button">Two state quit button for pressed/unpressed states</string>
+    <string name="two_state_save_button">Two state button for pressed/unpressed states</string>
+    <string name="two_state_pause_button">Two state button for pressed/unpressed states</string>
+    <string name="two_state_store_button">Two state button for pressed/unpressed states</string>
+    <string name="buy_item1">Button to purchase first item listed in store</string>
+    <string name="buy_item2">Button to purchase the second item listed in store</string>
+    <string name="buy_item3">Button to purchase the third item listed in store</string>
+    <string name="store_title"><bold>Welcome to the store! Purchase goods to aid in your quest.</bold></string>
+    <string name="store_life_icon">Icon for purchasing extra life in store</string>
+    <string name="store_battery_icon">Icon for purchasing extra battery in store</string>
+    <string name="store_bomb_icon">Icon for purchasing extra bombs in store</string>
+    <string name="store_life_cost">$500</string>
+    <string name="store_bomb_cost">$200</string>
+    <string name="store_battery_cost">$100</string>
+    <string name="splash_screen_title">Ghost Hunters!</string>
+
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pause"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Map" >
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/pause_button_on_map"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal"
+        android:padding="3dip" >
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/custom_pause_button"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/custom_pause_button"
+        android:contentDescription="@string/two_state_pause_button"
+        android:gravity="center" />
+
+    <ImageButton
+        android:id="@+id/custom_store_button"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/custom_store_button"
+        android:contentDescription="@string/two_state_store_button" />
+
+</RelativeLayout>

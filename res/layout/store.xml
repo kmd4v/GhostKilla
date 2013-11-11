@@ -1,0 +1,117 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pause"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainScreen" >
+
+     <ImageButton
+         android:id="@+id/buy_item1"
+         android:layout_width="100dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentTop="true"
+         android:layout_marginTop="93dp"
+         android:background="@drawable/custom_buy_button"
+         android:contentDescription="@string/buy_item1"
+         android:gravity="center" />
+
+     <ImageButton
+         android:id="@+id/buy_item3"
+         android:layout_width="100dp"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/buy_item1"
+         android:layout_below="@+id/buy_item1"
+         android:background="@drawable/custom_buy_button"
+         android:contentDescription="@string/buy_item3"
+         android:gravity="center" />
+
+     <ImageButton
+         android:id="@+id/buy_item2"
+         android:layout_width="100dp"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/buy_item3"
+         android:layout_below="@+id/buy_item3"
+         android:background="@drawable/custom_buy_button"
+         android:contentDescription="@string/buy_item2"
+         android:gravity="center" />
+
+     <TextView
+         android:id="@+id/store_title"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/buy_item1"
+         android:layout_alignParentTop="true"
+         android:layout_marginTop="20dp"
+         android:text="@string/store_title"
+         android:textAlignment="center"
+         android:textAppearance="@style/title_font"
+         android:textColor="@color/white"
+         android:textStyle="italic" />
+
+      <ImageView
+          android:id="@+id/battery_icon"
+          android:layout_width="25dp"
+          android:layout_height="50dp"
+          android:layout_alignRight="@+id/store_title"
+          android:layout_alignTop="@+id/buy_item1"
+          android:layout_marginRight="76dp"
+          android:contentDescription="@string/store_battery_icon"
+          android:src="@drawable/battery" />
+
+      <ImageView
+          android:id="@+id/bomb_icon"
+          android:layout_width="25dp"
+          android:layout_height="50dp"
+          android:layout_alignBottom="@+id/buy_item2"
+          android:layout_alignLeft="@+id/battery_icon"
+          android:layout_alignTop="@+id/buy_item2"
+          android:contentDescription="@string/store_bomb_icon"
+          android:src="@drawable/bomb_icon" />
+
+      <ImageView
+          android:id="@+id/life_icon"
+          android:layout_width="25dp"
+          android:layout_height="50dp"
+          android:layout_above="@+id/buy_item2"
+          android:layout_alignLeft="@+id/bomb_icon"
+          android:layout_alignTop="@+id/buy_item3"
+          android:contentDescription="@string/store_life_icon"
+          android:src="@drawable/life_icon" />
+
+       <TextView
+           android:id="@+id/store_life_cost"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignRight="@+id/store_title"
+           android:layout_alignTop="@+id/life_icon"
+           android:layout_marginTop="24dp"
+           android:text="@string/store_life_cost"
+           android:textColor="@color/white" />
+
+       <TextView
+           android:id="@+id/store_bomb_cost"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBottom="@+id/bomb_icon"
+           android:layout_alignLeft="@+id/store_life_cost"
+           android:layout_marginBottom="21dp"
+           android:text="@string/store_bomb_cost"
+           android:textColor="@color/white" />
+
+       <TextView
+           android:id="@+id/store_battery_cost"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBottom="@+id/battery_icon"
+           android:layout_alignRight="@+id/store_title"
+           android:layout_marginBottom="14dp"
+           android:text="@string/store_battery_cost"
+           android:textColor="@color/white" />
+
+</RelativeLayout>
