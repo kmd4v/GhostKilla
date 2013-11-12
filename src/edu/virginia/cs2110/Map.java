@@ -37,6 +37,8 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private LocationClient mLocationClient;
 	private Location currentLocation;
+	
+	//these are comments that I'm making to test uploading code to github
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
