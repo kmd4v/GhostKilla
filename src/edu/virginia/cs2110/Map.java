@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.SyncStateContract.Constants;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -26,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Map extends FragmentActivity implements OnTouchListener, 
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener {
+GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 	private LatLng userLocation = new LatLng(0,0);
 	static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -37,7 +40,11 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private LocationClient mLocationClient;
 	private Location currentLocation;
-	
+	private static final LocationRequest REQUEST = LocationRequest.create()
+			.setInterval(5*60*1000)      // 5 minutes
+			.setFastestInterval(3*60*1000) // 3 minutes
+			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 	//these are comments that I'm making to test uploading code to github
 
 	@Override
@@ -53,14 +60,6 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 
 		mLocationClient = new LocationClient(this, this, this);
 
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
-
-		// Move the camera instantly to hamburg with a zoom of 15.
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
-
-		// Zoom in, animating the camera.
-		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 	}
 
 	public void pause(View view) {
@@ -95,7 +94,30 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	@Override
 	public void onConnected(Bundle dataBundle) {
 		// Display the connection status
-		Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+		System.out.println("Got into onConnected");
+		mLocationClient.requestLocationUpdates(REQUEST, this);
+		currentLocation = mLocationClient.getLastLocation();
+
+		userLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
+
+		// Move the camera instantly to hamburg with a zoom of 15.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
+
+		// Zoom in, animating the camera.
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+		Marker user_loc = map.addMarker(new MarkerOptions().position(userLocation)
+				.title("Player1"));
+		Marker kiel = map.addMarker(new MarkerOptions()
+		.position(KIEL)
+		.title("Kiel")
+		.snippet("Kiel is cool")
+		.icon(BitmapDescriptorFactory
+				.fromResource(R.drawable.ghost_icon)));
 
 	}
 
@@ -151,23 +173,6 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		super.onStart();
 		// Connect the client.
 		mLocationClient.connect();
-
-            	if (mLocationClient.isConnected() == true) {
-            		System.out.println("Inside locationclient connected");
-					currentLocation = mLocationClient.getLastLocation();
-					double currentLat = currentLocation.getLatitude();
-					double currentLong = currentLocation.getLongitude();
-					userLocation = new LatLng(currentLat, currentLong);
-				}
-
-		Marker user_loc = map.addMarker(new MarkerOptions().position(userLocation)
-				.title("Player1"));
-		Marker kiel = map.addMarker(new MarkerOptions()
-		.position(KIEL)
-		.title("Kiel")
-		.snippet("Kiel is cool")
-		.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ghost_icon)));
 	}
 
 	/*
@@ -178,6 +183,15 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		// Disconnecting the client invalidates it.
 		mLocationClient.disconnect();
 		super.onStop();
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// Report to the UI that the location was updated
+		String msg = Double.toString(location.getLatitude()) + "," +
+				Double.toString(location.getLongitude());
+		System.out.println(msg);
+
 	}
 }
 
