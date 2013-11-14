@@ -1,6 +1,7 @@
 package edu.virginia.cs2110;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -35,7 +36,6 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	static final LatLng KIEL = new LatLng(53.551, 9.993);
 	private GoogleMap map;
 	private Person player;
-	private ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
 	private final static int
 	CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private LocationClient mLocationClient;
@@ -59,6 +59,16 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		b2.setOnTouchListener(this);
 
 		mLocationClient = new LocationClient(this, this, this);
+
+		ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
+		Location l = null;
+		Ghost g1 = new Ghost(l);
+		Ghost g2 = new Ghost(l);
+		Ghost g3 = new Ghost(l);
+		ghosts.add(g1);
+		ghosts.add(g2);
+		ghosts.add(g3);
+		player = new Person(ghosts, l);
 
 	}
 
@@ -103,7 +113,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
-		
+
 		map.clear(); //removes markers for players/ghosts so they aren't drawn multiple times if user leaves map screen
 
 		// Move the camera instantly to userLocation with a zoom of 18.
@@ -112,14 +122,53 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		// Zoom in, animating the camera.
 		map.animateCamera(CameraUpdateFactory.zoomTo(18), 2000, null);
 
+		this.player.setPlayerLocation(currentLocation);
+		Random ghostLoc = new Random();
+
+
+		//sets every new ghost to a randomized location based off of the player's location
+		for (Ghost g : this.player.getGhosts()){
+			if ( g.getGhostLocation() == null){
+				
+				Location l = new Location(this.player.getPlayerLocation());
+				Double quadrantSelection = ghostLoc.nextDouble();
+				
+				if(quadrantSelection < 0.25){
+					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
+					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
+					g.setGhostLocation(l);
+				}
+				else if(quadrantSelection >= 0.25 && quadrantSelection < 0.50){
+					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
+					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
+					g.setGhostLocation(l);
+				}
+				if(ghostLoc.nextDouble() >= 0.50 && quadrantSelection < 0.75){
+					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
+					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
+					g.setGhostLocation(l);
+				}
+				if(ghostLoc.nextDouble() >= 0.75){
+					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
+					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
+					g.setGhostLocation(l);
+				}
+			}
+		}
+
 		Marker user_loc = map.addMarker(new MarkerOptions().position(userLocation)
 				.title("Player1"));
-		Marker kiel = map.addMarker(new MarkerOptions()
-		.position(KIEL)
-		.title("Kiel")
-		.snippet("Kiel is cool")
-		.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ghost_icon)));
+
+		//draws each ghost to the map
+		for (Ghost g : this.player.getGhosts()){
+			LatLng latlng = new LatLng(g.getGhostLocation().getLatitude(), g.getGhostLocation().getLongitude());
+			Marker ghost = map.addMarker(new MarkerOptions()
+			.position(latlng)
+			.title("Ghost")
+			.snippet("This is a ghost")
+			.icon(BitmapDescriptorFactory
+					.fromResource(R.drawable.ghost_icon)));
+		}
 
 	}
 

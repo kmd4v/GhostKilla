@@ -1,12 +1,10 @@
 package edu.virginia.cs2110;
 
+import android.location.Location;
+
 public class Ghost {
 	
-	private double locx;
-	private double locy;
-	private double targetlocx;
-	private double targetlocy;
-	private Person player;
+	private Location ghostLocation;
 	private boolean isAlive;
 	private int speed;
 	private double killradius;
@@ -19,12 +17,9 @@ public class Ghost {
 	 * @param locx
 	 * @param locy
 	 */
-	public Ghost(Person p, double locx, double locy) {
-		this.locx = locx;
-		this.locy = locy;
-		this.player = p;
-		this.targetlocx = p.getLat();
-		this.targetlocy = p.getLon();
+	public Ghost(Location l) {
+		
+		this.setGhostLocation(l);
 		this.isAlive = true;
 		this.speed = 5;
 		this.killradius = 30;
@@ -40,12 +35,8 @@ public class Ghost {
 	 * @param killradius
 	 * @param money
 	 */
-	public Ghost(Person p, double locx, double locy, int speed, double killradius, int money) {
-		this.locx = locx;
-		this.locy = locy;
-		this.player = p;
-		this.targetlocx = p.getLat();
-		this.targetlocy = p.getLon();
+	public Ghost(Location l, int speed, double killradius, int money) {
+		this.ghostLocation = l;
 		this.isAlive = true;
 		this.speed = speed;
 		this.killradius = killradius;
@@ -76,46 +67,6 @@ public class Ghost {
 	}
 
 	//getters and setters
-	
-	public double getLocx() {
-		return locx;
-	}
-
-	public void setLocx(double locx) {
-		this.locx = locx;
-	}
-
-	public double getLocy() {
-		return locy;
-	}
-
-	public void setLocy(double locy) {
-		this.locy = locy;
-	}
-
-	public double getTargetlocx() {
-		return targetlocx;
-	}
-
-	public void setTargetlocx(double targetlocx) {
-		this.targetlocx = targetlocx;
-	}
-
-	public double getTargetlocy() {
-		return targetlocy;
-	}
-
-	public void setTargetlocy(double targetlocy) {
-		this.targetlocy = targetlocy;
-	}
-
-	public Person getPlayer() {
-		return player;
-	}
-
-	public void setPerson(Person player) {
-		this.player = player;
-	}
 
 	public boolean isAlive() {
 		return isAlive;
@@ -147,6 +98,14 @@ public class Ghost {
 
 	public void setMoney(int money) {
 		this.money = money;
+	}
+
+	public Location getGhostLocation() {
+		return ghostLocation;
+	}
+
+	public void setGhostLocation(Location ghostLocation) {
+		this.ghostLocation = ghostLocation;
 	}
 		
 	

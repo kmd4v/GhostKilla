@@ -2,11 +2,12 @@ package edu.virginia.cs2110;
 
 import java.util.ArrayList;
 
+import android.location.Location;
+
 public class Person {
 	
 	//Fields: Location, Direction, Range to kill ghost, Lives, Money, Score
-	private double lat;
-	private double lon;
+	private Location playerLocation;
 	private double range;
 	private int lives;
 	private double money;
@@ -14,10 +15,9 @@ public class Person {
 	private ProtonPack pp;
 	private ArrayList<Ghost> ghosts;
 	
-	public Person(ArrayList<Ghost> g, double latitude, double longitude)
+	public Person(ArrayList<Ghost> g, Location l)
 	{
-		lat = latitude;
-		lon = longitude;
+		setPlayerLocation(l);
 		range = 10;
 		lives = 3;
 		money = 100;
@@ -123,12 +123,12 @@ public class Person {
 		lives = lives + elives;
 	}
 
-	public double getLat() {
-		return lat;
+	public ArrayList<Ghost> getGhosts() {
+		return ghosts;
 	}
 
-	public double getLon() {
-		return lon;
+	public void setGhosts(ArrayList<Ghost> ghosts) {
+		this.ghosts = ghosts;
 	}
 
 	public double getRange() {
@@ -145,6 +145,14 @@ public class Person {
 
 	public int getScore() {
 		return score;
+	}
+
+	public Location getPlayerLocation() {
+		return playerLocation;
+	}
+
+	public void setPlayerLocation(Location playerLocation) {
+		this.playerLocation = playerLocation;
 	}
 	
 	
