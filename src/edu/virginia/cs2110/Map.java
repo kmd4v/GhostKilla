@@ -103,12 +103,14 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
+		
+		map.clear(); //removes markers for players/ghosts so they aren't drawn multiple times if user leaves map screen
 
-		// Move the camera instantly to hamburg with a zoom of 15.
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
+		// Move the camera instantly to userLocation with a zoom of 18.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
 
 		// Zoom in, animating the camera.
-		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+		map.animateCamera(CameraUpdateFactory.zoomTo(18), 2000, null);
 
 		Marker user_loc = map.addMarker(new MarkerOptions().position(userLocation)
 				.title("Player1"));

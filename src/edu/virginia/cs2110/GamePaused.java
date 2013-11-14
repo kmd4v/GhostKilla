@@ -32,16 +32,14 @@ public class GamePaused extends Activity implements OnTouchListener{
 
 	}
 
-	/*public void resume(View view) {
-	    Intent intent = new Intent(GamePaused.this, Store.class);
-	    GamePaused.this.startActivity(intent);
-        GamePaused.this.finish();
-	}*/
-	
+	public void resume(View view) {
+		this.onBackPressed();
+	}
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		GamePaused.this.finish();
+		this.finish();
 	}
 
 	@Override
@@ -49,7 +47,7 @@ public class GamePaused extends Activity implements OnTouchListener{
 		// Perform action on click
 		switch(v.getId()) {
 		case R.id.custom_button:
-		//	resume(v);
+			resume(v);
 			break;
 
 		case R.id.custom_audio_button:
@@ -71,5 +69,5 @@ public class GamePaused extends Activity implements OnTouchListener{
 		return false;
 
 	}
-	
+
 }
