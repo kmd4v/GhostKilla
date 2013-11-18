@@ -24,8 +24,8 @@ public class MainScreen extends Activity {
 		setContentView(R.layout.splash_screen);
 		GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 		
-		MediaPlayer mediaPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.mission_impossible);
-		mediaPlayer.start(); 
+		//MediaPlayer mediaPlayer = MediaPlayer.create(this.getBaseContext(), R.raw.mission_impossible);
+		//mediaPlayer.start(); 
 		
 		new Handler().postDelayed(new Runnable() { //stackoverload article on how to change screen by timing
             @Override
