@@ -39,11 +39,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private LocationClient mLocationClient;
 	private Location currentLocation;
-	boolean mUpdatesRequested;
 	//private Marker user_loc;
 	static final LocationRequest REQUEST = LocationRequest.create()
-			.setInterval(500)      // 0.5 seconds
-			.setFastestInterval(100) // 0.1 seconds
+			.setInterval(5000)      // 0.5 seconds
+			.setFastestInterval(1000) // 0.1 seconds
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	//these are comments that I'm making to test uploading code to github
@@ -60,6 +59,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		b2.setOnTouchListener(this);
 
 		mLocationClient = new LocationClient(this, this, this);
+		//GooglePlayServicesClient.ConnectionCallbacks listener = this;
+		//mLocationClient.registerConnectionCallbacks(listener);
+
 
 		ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
 		Location l = null;
@@ -106,7 +108,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	public void onConnected(Bundle dataBundle) {
 		// Display the connection status
 		System.out.println("Got into onConnected");
-		
+
 		mLocationClient.requestLocationUpdates(REQUEST, this);
 		currentLocation = mLocationClient.getLastLocation();
 
@@ -126,19 +128,21 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		this.player.updateGhostLocations(this.player.getGhosts()); //updates locations ghosts
 
 
-//		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
-//				.title("Player1"));
-		
-
 		//draws each ghost to the map
 		for (Ghost g : this.player.getGhosts()){
-			LatLng latlng = new LatLng(g.getGhostLocation().getLatitude(), g.getGhostLocation().getLongitude());
-			Marker ghost = map.addMarker(new MarkerOptions()
-			.position(latlng)
-			.title("Ghost")
-			.snippet("This is a ghost")
-			.icon(BitmapDescriptorFactory
-					.fromResource(R.drawable.ghost_icon)));
+			Location ghostLoc = g.getGhostLocation();
+			if(ghostLoc != null){
+				LatLng latlng = new LatLng(ghostLoc.getLatitude(), ghostLoc.getLongitude());
+				Marker ghost = map.addMarker(new MarkerOptions()
+				.position(latlng)
+				.title("Ghost")
+				.snippet("This is a ghost")
+				.icon(BitmapDescriptorFactory
+						.fromResource(R.drawable.ghost_icon)));
+			}
+			else{
+				System.out.print("Not adding ghost due to null location");
+			}
 		}
 
 	}
@@ -223,30 +227,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	public void onLocationChanged(Location location) {
 		// Report to the UI that the location was updated
 		map.clear(); // clears map of all previous marker locations
-		
+
 		player.setPlayerLocation(location);
-		System.out.println("Player location is set to correct value before calling AsyncTask: " + player.getPlayerLocation().toString());
 		ConnectLocationServices c = new ConnectLocationServices(this);
 		c.execute(this);
-		//LatLng updatedLocation = new LatLng(location.getLongitude(), location.getLongitude());
-
-//		user_loc.setPosition(updatedLocation);
-//		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
-//				.title("Player1"));
-
-//		player.updateGhostLocations(this.player.getGhosts());
-//		LatLng updatedGhostLocation;
-//
-//		for(Ghost g : this.player.getGhosts()){ //redraws ghosts to updated locations
-//			updatedGhostLocation = new LatLng(g.getGhostLocation().getLatitude(), g.getGhostLocation().getLongitude());
-//			Marker ghost = map.addMarker(new MarkerOptions()
-//			.position(updatedGhostLocation)
-//			.title("Ghost")
-//			.snippet("This is a ghost")
-//			.icon(BitmapDescriptorFactory
-//					.fromResource(R.drawable.ghost_icon)));
-//		}
-
 	}
 
 	public static class ErrorDialogFragment extends DialogFragment {
@@ -295,7 +279,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		}
 
 	}
-	
+
 	public Person getPerson() {
 		return player;
 	}
@@ -303,7 +287,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	public void setPerson(Person player) {
 		this.player = player;
 	}
-	
+
 	public GoogleMap getMap() {
 		return map;
 	}
