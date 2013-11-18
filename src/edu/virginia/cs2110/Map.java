@@ -40,10 +40,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	private LocationClient mLocationClient;
 	private Location currentLocation;
 	boolean mUpdatesRequested;
-	private Marker user_loc;
+	//private Marker user_loc;
 	static final LocationRequest REQUEST = LocationRequest.create()
-			.setInterval(5000)      // 5 seconds
-			.setFastestInterval(1000) // 1 second
+			.setInterval(500)      // 0.5 seconds
+			.setFastestInterval(100) // 0.1 seconds
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	//these are comments that I'm making to test uploading code to github
@@ -106,6 +106,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	public void onConnected(Bundle dataBundle) {
 		// Display the connection status
 		System.out.println("Got into onConnected");
+		
 		mLocationClient.requestLocationUpdates(REQUEST, this);
 		currentLocation = mLocationClient.getLastLocation();
 
@@ -114,9 +115,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
-
-		map.clear(); //removes markers for players/ghosts so they aren't drawn multiple times if user leaves map screen
-
+		map.setMyLocationEnabled(true);
 		// Move the camera instantly to userLocation with a zoom of 18.
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
 
@@ -124,44 +123,12 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		map.animateCamera(CameraUpdateFactory.zoomTo(18), 2000, null);
 
 		this.player.setPlayerLocation(currentLocation);
-		/*Random ghostLoc = new Random();
-
-
-		//sets every new ghost to a randomized location based off of the player's location
-		for (Ghost g : this.player.getGhosts()){
-			if ( g.getGhostLocation() == null){
-
-				Location l = new Location(this.player.getPlayerLocation());
-				Double quadrantSelection = ghostLoc.nextDouble();
-
-				if(quadrantSelection < 0.25){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				else if(quadrantSelection >= 0.25 && quadrantSelection < 0.50){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.50 && quadrantSelection < 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-			}
-		}*/
-
 		this.player.updateGhostLocations(this.player.getGhosts()); //updates locations ghosts
 
 
-		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
-				.title("Player1"));
+//		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
+//				.title("Player1"));
+		
 
 		//draws each ghost to the map
 		for (Ghost g : this.player.getGhosts()){
@@ -256,27 +223,29 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	public void onLocationChanged(Location location) {
 		// Report to the UI that the location was updated
 		map.clear(); // clears map of all previous marker locations
-		player.getPlayerLocation().setLatitude(location.getLatitude());
-		player.getPlayerLocation().setLongitude(location.getLongitude());
-		LatLng updatedLocation = new LatLng(player.getPlayerLocation().getLongitude(), player.getPlayerLocation().getLongitude());
-		LatLng updatedGhostLocation;
 		
-		user_loc.setPosition(updatedLocation);
-		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
-				.title("Player1"));
-		
-		player.updateGhostLocations(this.player.getGhosts());
-		
-		
-		for(Ghost g : this.player.getGhosts()){ //redraws ghosts to updated locations
-		updatedGhostLocation = new LatLng(g.getGhostLocation().getLatitude(), g.getGhostLocation().getLongitude());
-		Marker ghost = map.addMarker(new MarkerOptions()
-		.position(updatedGhostLocation)
-		.title("Ghost")
-		.snippet("This is a ghost")
-		.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ghost_icon)));
-		}
+		player.setPlayerLocation(location);
+		System.out.println("Player location is set to correct value before calling AsyncTask: " + player.getPlayerLocation().toString());
+		ConnectLocationServices c = new ConnectLocationServices(this);
+		c.execute(this);
+		//LatLng updatedLocation = new LatLng(location.getLongitude(), location.getLongitude());
+
+//		user_loc.setPosition(updatedLocation);
+//		user_loc = map.addMarker(new MarkerOptions().position(userLocation)
+//				.title("Player1"));
+
+//		player.updateGhostLocations(this.player.getGhosts());
+//		LatLng updatedGhostLocation;
+//
+//		for(Ghost g : this.player.getGhosts()){ //redraws ghosts to updated locations
+//			updatedGhostLocation = new LatLng(g.getGhostLocation().getLatitude(), g.getGhostLocation().getLongitude());
+//			Marker ghost = map.addMarker(new MarkerOptions()
+//			.position(updatedGhostLocation)
+//			.title("Ghost")
+//			.snippet("This is a ghost")
+//			.icon(BitmapDescriptorFactory
+//					.fromResource(R.drawable.ghost_icon)));
+//		}
 
 	}
 
@@ -326,70 +295,22 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		}
 
 	}
+	
+	public Person getPerson() {
+		return player;
+	}
 
-	/*public void updateGhostLocations(Ghost...params){
-		
-		Random ghostLoc = new Random();
+	public void setPerson(Person player) {
+		this.player = player;
+	}
+	
+	public GoogleMap getMap() {
+		return map;
+	}
 
-		//sets every new ghost to a randomized location based off of the player's location
-		for (Ghost g : this.player.getGhosts()){
-			if ( g.getGhostLocation() == null){
+	public void setMap(GoogleMap map) {
+		this.map = map;
+	}
 
-				Location l = new Location(this.player.getPlayerLocation());
-				Double quadrantSelection = ghostLoc.nextDouble();
-
-				if(quadrantSelection < 0.25){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				else if(quadrantSelection >= 0.25 && quadrantSelection < 0.50){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.50 && quadrantSelection < 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 1000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 1000.0) );
-					g.setGhostLocation(l);
-				}
-			}
-			else {
-
-				Location l = g.getGhostLocation();
-				Double quadrantSelection = ghostLoc.nextDouble();
-
-				if(quadrantSelection < 0.25){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(l);
-				}
-				else if(quadrantSelection >= 0.25 && quadrantSelection < 0.50){
-					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.50 && quadrantSelection < 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
-					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(l);
-				}
-				if(ghostLoc.nextDouble() >= 0.75){
-					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
-					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(l);
-				}
-			}
-		}
-	}*/
 }
-//  @Override
-//  public boolean onCreateOptionsMenu(Menu menu) {
-//    getMenuInflater().inflate(R.menu.activity_main, menu);
-//    return true;
-//  } 
+
