@@ -285,24 +285,24 @@ public class Person implements Serializable {
 				Double quadrantSelection = ghostLoc.nextDouble();
 
 				if(quadrantSelection < 0.25){
-//					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
-//					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(playerLocation);
+					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
+					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
+					g.setGhostLocation(l);
 				}
 				else if(quadrantSelection >= 0.25 && quadrantSelection < 0.50){
-//					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
-//					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(playerLocation);
+					l.setLatitude( l.getLatitude() + (ghostLoc.nextFloat() / 10000.0) );
+					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
+					g.setGhostLocation(l);
 				}
 				if(ghostLoc.nextDouble() >= 0.50 && quadrantSelection < 0.75){
-//					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
-//					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(playerLocation);
+					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
+					l.setLongitude( l.getLongitude() - (ghostLoc.nextFloat() / 10000.0) );
+					g.setGhostLocation(l);
 				}
 				if(ghostLoc.nextDouble() >= 0.75){
-//					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
-//					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
-					g.setGhostLocation(playerLocation);
+					l.setLatitude( l.getLatitude() - (ghostLoc.nextFloat() / 10000.0) );
+					l.setLongitude( l.getLongitude() + (ghostLoc.nextFloat() / 10000.0) );
+					g.setGhostLocation(l);
 				}
 			}
 		}

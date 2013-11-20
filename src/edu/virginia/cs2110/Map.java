@@ -103,7 +103,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		if (player.useVacuum() == false){
 			Toast.makeText(getApplicationContext(), "No ghosts in range", Toast.LENGTH_SHORT).show();
 		}
-		else{
+		else {
 			Toast.makeText(getApplicationContext(), "You killed the ghost!", Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -253,7 +253,7 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		task = new RunThisTown(Map.this);
+		task = new RunThisTown(this);
 		ArrayList<Object> temp = new ArrayList<Object>();
 		temp.add(player);
 		temp.add(ghosts);
