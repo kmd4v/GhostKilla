@@ -28,8 +28,8 @@
         android:id="@+id/custom_pause_button"
         android:layout_width="100dp"
         android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/custom_pause_button"
         android:contentDescription="@string/two_state_pause_button"
         android:gravity="center" />
@@ -38,9 +38,52 @@
         android:id="@+id/custom_store_button"
         android:layout_width="100dp"
         android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/custom_store_button"
         android:contentDescription="@string/two_state_store_button" />
+
+    <TextView
+        android:id="@+id/Scores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="15dp"
+        android:text="Score:" />
+
+    <TextView
+        android:id="@+id/Money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Score"
+        android:layout_below="@+id/Score"
+        android:text="Money: $" />
+
+    <Button
+        android:id="@+id/killButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/pause_button_on_map"
+        android:layout_centerHorizontal="true"
+        android:text="Kill Ghost!" />
+
+    <TextView
+        android:id="@+id/Lives"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/Battery"
+        android:text="Lives" />
+
+    <TextView
+        android:id="@+id/Battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/Lives"
+        android:layout_marginRight="26dp"
+        android:text="Battery" />
 
 </RelativeLayout>

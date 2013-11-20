@@ -39,7 +39,9 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private LocationClient mLocationClient;
 	private Location currentLocation;
-	//private Marker user_loc;
+	static final int INTENT_RESULT = 0;
+	private ArrayList<Ghost> ghosts;
+	private RunThisTown task;
 	static final LocationRequest REQUEST = LocationRequest.create()
 			.setInterval(5000)      // 0.5 seconds
 			.setFastestInterval(1000) // 0.1 seconds
@@ -57,13 +59,16 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 		View b2 = findViewById(R.id.custom_store_button);
 		b2.setOnTouchListener(this);
+		
+		View b3 = findViewById(R.id.killButton);
+		b3.setOnTouchListener(this);
 
 		mLocationClient = new LocationClient(this, this, this);
 		//GooglePlayServicesClient.ConnectionCallbacks listener = this;
 		//mLocationClient.registerConnectionCallbacks(listener);
 
 
-		ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
+		this.ghosts = new ArrayList<Ghost>();
 		Location l = null;
 		Ghost g1 = new Ghost(l);
 		Ghost g2 = new Ghost(l);
@@ -81,8 +86,26 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 	}
 
 	public void store(View view) {
-		Intent intent = new Intent(Map.this, Store.class);
-		Map.this.startActivity(intent);
+		Intent intent = new Intent(Map.this, Store.class); 
+		intent.putExtra("range", player.getRange());
+		intent.putExtra("lives", player.getLives());
+		intent.putExtra("money", player.getMoney());
+		intent.putExtra("score", player.getScore());
+		intent.putExtra("pp battery", player.getProtonPack().getBattery());
+		intent.putExtra("pp bombs", player.getProtonPack().getBombs());
+		//		intent.putExtra("location", new LocationDataWrapper(this.player.getPlayerLocation()));
+		//		intent.putExtra("ghost array", new GhostsDataWrapper(player.getGhosts()));
+		startActivityForResult(intent, INTENT_RESULT);    
+		//Map.this.startActivity(intent);
+	}
+
+	public void kill(View v){
+		if (player.useVacuum() == false){
+			Toast.makeText(getApplicationContext(), "No ghosts in range", Toast.LENGTH_SHORT).show();
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "You killed the ghost!", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -94,6 +117,10 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 		case R.id.custom_pause_button:
 			pause(v);
+			break;
+
+		case R.id.killButton:
+			kill(v);
 			break;
 		}
 		return false;
@@ -221,6 +248,22 @@ GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 		 */
 		mLocationClient.disconnect();
 		super.onStop();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		task = new RunThisTown(Map.this);
+		ArrayList<Object> temp = new ArrayList<Object>();
+		temp.add(player);
+		temp.add(ghosts);
+		task.execute(temp);
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		task.cancel(true);
 	}
 
 	@Override

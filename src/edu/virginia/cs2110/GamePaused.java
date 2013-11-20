@@ -56,8 +56,11 @@ public class GamePaused extends Activity implements OnTouchListener{
 			break; 
 
 		case R.id.custom_quit_button:
-			/*Intent k = new Intent(this, MainScreen.class);
-			this.startActivity(k);*/
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+			//stack overflow article on how to quit
 			break;
 
 		case R.id.custom_save_button:

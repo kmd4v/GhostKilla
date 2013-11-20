@@ -114,4 +114,14 @@
            android:text="@string/store_battery_cost"
            android:textColor="@color/white" />
 
+       <ImageButton
+           android:id="@+id/store_back_button"
+           android:layout_width="100dp"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:layout_toLeftOf="@+id/store_bomb_cost"
+           android:background="@drawable/store_back_button"
+           android:contentDescription="@string/store_back_button"
+           android:gravity="center" />
+
 </RelativeLayout>

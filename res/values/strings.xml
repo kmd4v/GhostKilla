@@ -19,6 +19,7 @@
     <string name="buy_item1">Button to purchase first item listed in store</string>
     <string name="buy_item2">Button to purchase the second item listed in store</string>
     <string name="buy_item3">Button to purchase the third item listed in store</string>
+    <string name="store_back_button">Button to purchase the fourth item listed in store</string>
     <string name="store_title"><bold>Welcome to the store! Purchase goods to aid in your quest.</bold></string>
     <string name="store_life_icon">Icon for purchasing extra life in store</string>
     <string name="store_battery_icon">Icon for purchasing extra battery in store</string>

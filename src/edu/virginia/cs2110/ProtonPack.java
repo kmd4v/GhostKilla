@@ -6,7 +6,6 @@ public class ProtonPack {
 	private int battery;
 	//max number of bombs is 3
 	private int bombs;
-	private Person p;
 	
 	/**
 	 * default constructor
@@ -15,7 +14,6 @@ public class ProtonPack {
 	public ProtonPack(Person p) {
 		this.battery = 5;
 		this.bombs = 0;
-		this.p = p;
 	}
 	
 	/**
@@ -27,7 +25,11 @@ public class ProtonPack {
 	public ProtonPack(Person p, int battery, int bombs) {
 		this.battery = battery;
 		this.bombs = bombs;
-		this.p = p;
+	}
+	
+	public ProtonPack(int battery, int bombs) {
+		this.battery = battery;
+		this.bombs = bombs;
 	}
 	
 	/**
@@ -150,15 +152,6 @@ public class ProtonPack {
 
 	public void setBombs(int bombs) {
 		this.bombs = bombs;
-	}
-
-	public Person getP() {
-		return p;
-	}
-
-	public void setP(Person p) {
-		this.p = p;
-	}
-	
+	}	
 	
 }

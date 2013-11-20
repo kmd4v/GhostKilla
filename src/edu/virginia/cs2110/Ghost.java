@@ -1,9 +1,15 @@
 package edu.virginia.cs2110;
 
+import java.io.Serializable;
+
 import android.location.Location;
 
-public class Ghost {
+public class Ghost implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8300858772665213788L;
 	private Location ghostLocation;
 	private boolean isAlive;
 	private int speed;
@@ -107,6 +113,5 @@ public class Ghost {
 	public void setGhostLocation(Location ghostLocation) {
 		this.ghostLocation = ghostLocation;
 	}
-		
 	
 }
